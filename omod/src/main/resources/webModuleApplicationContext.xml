@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!-- Beans to add to the current Application context definition -->
+
+<beans>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.mohappointment.service.IAppointmentService</value>
+                <bean
+                        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+                    <property name="transactionManager">
+                        <ref bean="transactionManager" />
+                    </property>
+                    <property name="target">
+                        <bean
+                                class="org.openmrs.module.mohappointment.impl.AppointmentService">
+                            <property name="appointmentDAO">
+                                <bean
+                                        class="org.openmrs.module.mohappointment.db.hibernate.HibernateAppointmentDAO">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory" />
+                                    </property>
+                                </bean>
+                            </property>
+                        </bean>
+                    </property>
+                    <property name="preInterceptors">
+                        <list>
+                            <ref bean="authorizationInterceptor" />
+                        </list>
+                    </property>
+                    <property name="transactionAttributeSource">
+                        <bean
+                                class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="mohappointmentUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="localeChangeInterceptor" />
+            </list>
+        </property>
+        <property name="order"><value>2</value></property>
+        <property name="mappings">
+            <props>
+                <prop key="**/appointment.portlet">appointmentPortletController</prop>
+                <prop key="module/mohappointment/patientSummary.form">appointmentPatientSummaryFormController</prop>
+                <prop key="module/mohappointment/advancedSearch.form">searchAppointmentFormController</prop>
+                <prop key="module/mohappointment/providerDashboard.form">providerAppointmentDashboardFormController</prop>
+                <prop key="module/mohappointment/serviceProvider.list">serviceProviderListController</prop>
+                <prop key="module/mohappointment/editServiceProvider.form">appointmentEditServiceProviderController</prop>
+                <prop key="module/mohappointment/editService.form">appointmentEditServiceController</prop>
+                <prop key="module/mohappointment/serviceProvider.form">serviceProviderFormController</prop>
+                <prop key="module/mohappointment/service.list">serviceListController</prop>
+                <prop key="module/mohappointment/service.form">serviceFormController</prop>
+                <prop key="module/mohappointment/findAppointment.form">findAppointmentFormController</prop>
+                <prop key="module/mohappointment/addAppointment.form">addAppointmentFormController</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Controllers -->
+
+    <bean id="appointmentPortletController" class="org.openmrs.module.mohappointment.web.controller.AppointmentDashboardPortletController" />
+
+    <bean id="findAppointmentFormController" class="org.openmrs.module.mohappointment.web.controller.FindAppointmentController">
+        <property name="viewName"><value>/module/mohappointment/findAppointment</value></property>
+    </bean>
+
+    <bean id="serviceFormController" class="org.openmrs.module.mohappointment.web.controller.AppointmentServiceFormController">
+        <property name="viewName"><value>/module/mohappointment/serviceForm</value></property>
+    </bean>
+
+    <bean id="serviceListController" class="org.openmrs.module.mohappointment.web.controller.AppointmentServiceListController">
+        <property name="viewName"><value>/module/mohappointment/serviceList</value></property>
+    </bean>
+
+    <bean id="serviceProviderFormController" class="org.openmrs.module.mohappointment.web.controller.AppointmentServiceProviderFormController">
+        <property name="viewName"><value>/module/mohappointment/serviceProviderForm</value></property>
+    </bean>
+
+    <bean id="serviceProviderListController" class="org.openmrs.module.mohappointment.web.controller.AppointmentServiceProviderListController">
+        <property name="viewName"><value>/module/mohappointment/serviceProviderList</value></property>
+    </bean>
+
+    <bean id="appointmentEditServiceProviderController" class="org.openmrs.module.mohappointment.web.controller.AppointmentEditServiceProviderController">
+        <property name="viewName"><value>/module/mohappointment/editProviderService</value></property>
+    </bean>
+
+    <bean id="appointmentEditServiceController" class="org.openmrs.module.mohappointment.web.controller.AppointmentEditServiceController">
+        <property name="viewName"><value>/module/mohappointment/editService</value></property>
+    </bean>
+
+    <bean id="appointmentPatientSummaryFormController" class="org.openmrs.module.mohappointment.web.controller.AppointmentPatientSummaryFormController">
+        <property name="viewName"><value>/module/mohappointment/patientSummary</value></property>
+    </bean>
+
+    <bean id="searchAppointmentFormController" class="org.openmrs.module.mohappointment.web.controller.SearchAppointmentFormController">
+        <property name="viewName"><value>/module/mohappointment/searchAppointment</value></property>
+    </bean>
+
+    <bean id="providerAppointmentDashboardFormController" class="org.openmrs.module.mohappointment.web.controller.AppointmentDashboardByProviderFormController">
+        <property name="viewName"><value>/module/mohappointment/providerAppointmentDashboardForm</value></property>
+    </bean>
+
+    <bean id="addAppointmentFormController" class="org.openmrs.module.mohappointment.web.controller.AddAppointmentFormController">
+        <property name="viewName"><value>/module/mohappointment/mohappointmentForm</value></property>
+    </bean>
+
+    <!-- /Controllers -->
+
+    <bean class="org.openmrs.module.mohappointment.utils.ContextProvider" />
+</beans>
