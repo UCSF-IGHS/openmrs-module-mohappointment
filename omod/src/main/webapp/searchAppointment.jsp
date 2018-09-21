@@ -12,9 +12,13 @@
 <openmrs:htmlInclude file="/moduleResources/mohappointment/scripts/ui/ui.dialog.js" />
 <openmrs:htmlInclude file="/moduleResources/mohappointment/scripts/ui/ui.draggable.js" />
 <openmrs:htmlInclude file="/moduleResources/mohappointment/scripts/ui/ui.resizable.js" />
+
 <openmrs:htmlInclude file="/moduleResources/mohappointment/theme/ui.all.css" />
 <openmrs:htmlInclude file="/moduleResources/mohappointment/theme/demo.css" />
 
+<script type="text/javascript">
+		var $j = jQuery.noConflict();
+</script>
 
 <h2 style="display: inline;"><spring:message code="mohappointment.appointment"/></h2> : <span class="boldTitle"><spring:message code="mohappointment.search.title"/></span>
 <br/><br/>
@@ -26,11 +30,11 @@
 		<div class="list_title">
 			<div class="list_title_msg"><spring:message code="mohappointment.search.result"/></div>
 			<div class="list_title_bts">
-			
+
 				<form style="display: inline;" action="#" method="post">
 					<input onclick="showExportDialog();" type="button" class="list_exportBt" value="<spring:message code="mohappointment.general.export"/>"/>
-				</form>	
-					
+				</form>
+
 			</div>
 			<div style="clear:both;"></div>
 		</div>
@@ -70,14 +74,14 @@
 					<td class="rowValue ${status.count%2!=0?'even':''}"><a href="#">${appointment.reason.valueCoded.name}</a></td>
 					<td class="rowValue ${status.count%2!=0?'even':''}"><a href="#">${appointment.service.name}</a></td>
 					<td class="rowValue ${status.count%2!=0?'even':''}"><a href="#">${appointment.location}</a></td>
-					<td class="rowValue ${status.count%2!=0?'even':''}"><a href="#">${appointment.appointmentState.description}</a></td>				
+					<td class="rowValue ${status.count%2!=0?'even':''}"><a href="#">${appointment.appointmentState.description}</a></td>
 				</tr>
 			</c:forEach>
 		</table>
 		<div class="list_footer">
 			<div class="list_footer_info">&nbsp;&nbsp;&nbsp;</div>
-			<div class="list_footer_pages">		
-				&nbsp;&nbsp;&nbsp;	
+			<div class="list_footer_pages">
+				&nbsp;&nbsp;&nbsp;
 			</div>
 			<div style="clear: both"></div>
 		</div>
@@ -87,9 +91,9 @@
 <div id="divDlg"></div>
 <div id="dlgCtnt" style="display: none;">
 	<form action="advancedSearch.form?export=true${parameters}" method="post">
-		
+
 		<%@ include file="templates/exportForm.jsp"%>
-		
+
 	</form>
 </div>
 
@@ -99,10 +103,10 @@
 		//distroyResultDiv();
 		showDialog();
 	}
-	
+
 	function showDialog(){
-		$("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='mohappointment.export.data'/>'><p><div id='result'>"+$('#dlgCtnt').html()+"</div></p></div>");
-		$("#dialog").dialog({
+		$j("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='mohappointment.export.data'/>'><p><div id='result'>"+$j('#dlgCtnt').html()+"</div></p></div>");
+		$j("#dialog").dialog({
 			zIndex: 980,
 			bgiframe: true,
 			height: 220,
@@ -110,7 +114,7 @@
 			modal: true
 		});
 	}
-	
+
 	function distroyResultDiv(){
 		//while(document.getElementById("dialog")){
 			//var DIVtoRemove = document.getElementById("dialog");
@@ -118,7 +122,7 @@
 		//}
 	}
 
-	$(document).ready(function(){
+	$j(document).ready(function(){
 	});
 </script>
 

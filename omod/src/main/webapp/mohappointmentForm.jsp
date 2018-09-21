@@ -1,10 +1,7 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <openmrs:htmlInclude file="/moduleResources/mohappointment/style/listing.css" />
 <openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
-
-
 <script type="text/javascript">
 	var $app = jQuery.noConflict();
 

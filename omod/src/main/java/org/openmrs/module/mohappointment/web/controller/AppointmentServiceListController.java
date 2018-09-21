@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.openmrs.module.mohappointment.web.controller;
 
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
 /**
  * @author Yves GAKUBA
- * 
+ *
  */
 public class AppointmentServiceListController extends
 		ParameterizableViewController {
@@ -59,7 +59,7 @@ public class AppointmentServiceListController extends
 
 	/**
 	 * Deletes/Voids the Service that was clicked
-	 * 
+	 *
 	 * @param request
 	 *            the HttpServletRequest
 	 * @param mav
@@ -86,7 +86,7 @@ public class AppointmentServiceListController extends
 				service.setRetireReason("The service is no longer in use");
 
 				ias.saveService(service);
-				
+
 				/** Remove/Void all corresponding ServiceProviders */
 				AppointmentUtil.removeServiceProvidersHavingThisService(service);
 

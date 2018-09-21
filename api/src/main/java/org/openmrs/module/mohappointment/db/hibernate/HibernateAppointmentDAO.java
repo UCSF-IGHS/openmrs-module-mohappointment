@@ -38,7 +38,7 @@ import org.openmrs.module.mohappointment.singletonpattern.AppointmentList;
 
 /**
  * @author Kamonyo
- * 
+ *
  *         This is the Appointment Services working together with the Hibernate
  */
 
@@ -126,7 +126,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#cancelAppointment
 	 * (org.openmrs.module.mohappointment.service.IAppointment)
@@ -181,20 +181,20 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 						Integer.valueOf("" + conditions[1])) != null)
 					if (!conditions[1].equals("")
 							&& Context
-									.getUserService()
-									.getUser(
-											Integer.valueOf("" + conditions[1]))
-									.getPerson() != null)
+							.getUserService()
+							.getUser(
+									Integer.valueOf("" + conditions[1]))
+							.getPerson() != null)
 						// Code has to be inserted here in order to load those
 						// appointment depending on the provider working in this
 						// service
 						combinedSearch.append(" provider_id = "
 								+ Context
-										.getUserService()
-										.getUser(
-												Integer.valueOf(""
-														+ conditions[1]))
-										.getPerson().getPersonId() + " AND ");
+								.getUserService()
+								.getUser(
+										Integer.valueOf(""
+												+ conditions[1]))
+								.getPerson().getPersonId() + " AND ");
 
 			if (null != conditions[2] && !conditions[2].equals(""))
 				combinedSearch.append(" location_id = " + conditions[2] + ""
@@ -202,7 +202,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			if (null != conditions[3] && !conditions[3].equals("")) {
 				combinedSearch.append(" appointment_date >= '"
 						+ new SimpleDateFormat("yyyy-MM-dd")
-								.format((Date) conditions[3]) + "' AND ");
+						.format((Date) conditions[3]) + "' AND ");
 			}
 			if (null != conditions[4] && !conditions[4].equals("")) {
 				if ((Boolean) conditions[4] == false)
@@ -217,7 +217,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			if (null != conditions[5] && !conditions[5].equals(""))
 				combinedSearch.append(" appointment_date <= '"
 						+ new SimpleDateFormat("yyyy-MM-dd")
-								.format((Date) conditions[5]) + "' AND ");
+						.format((Date) conditions[5]) + "' AND ");
 
 			if (null != conditions[6] && !conditions[6].equals(""))
 				combinedSearch.append(" appointment_state_id = "
@@ -254,7 +254,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#loadAllAppointments()
 	 */
@@ -281,7 +281,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#getAppointmentStates
 	 * ()
@@ -296,7 +296,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seeorg.openmrs.module.mohappointment.db.AppointmentDAO#
 	 * getAppointmentStatesByName(java.lang.String)
 	 */
@@ -319,7 +319,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#saveService(org.openmrs
 	 * .module.mohappointment.service.Services)
@@ -332,7 +332,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#saveServiceProviders
 	 * (org.openmrs.module.mohappointment.service.IServiceProviders)
@@ -345,7 +345,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#updateService(org
 	 * .openmrs.module.mohappointment.service.Services)
@@ -357,7 +357,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#updateServiceProviders
 	 * (org.openmrs.module.mohappointment.service.IServiceProviders)
@@ -369,7 +369,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#getPersonsByService
 	 * (org.openmrs.module.mohappointment.service.Services)
@@ -388,7 +388,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#getServiceByProvider
 	 * (org.openmrs.Person)
@@ -413,7 +413,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#getServiceById(java
 	 * .lang.Integer)
@@ -452,7 +452,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * AppointmentDAO#getServiceProviders()
 	 */
@@ -469,7 +469,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Jsdoc)
-	 * 
+	 *
 	 * @see AppointmentDAO#getServicesByProvider(org.openmrs.Person)
 	 */
 	@Override
@@ -492,7 +492,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 						// if (!serv.equals(service))
 						// services.add(service);
 						services.add(sp.getService());// to be commented if
-														// uncomment above!
+						// uncomment above!
 						// }
 					}
 				}
@@ -504,7 +504,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	/**
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see AppointmentDAO#getServices()
 	 */
 	@Override
@@ -593,7 +593,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			if (obj[7] != null)
 				appointment.setProvider(Context.getPersonService().getPerson(
 						(Integer) obj[7]));
-			
+
 			if (obj[8] != null)
 				appointment.setService(getServiceById((Integer) obj[8]));
 
