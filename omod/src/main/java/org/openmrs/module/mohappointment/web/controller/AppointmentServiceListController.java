@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Services;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.openmrs.module.mohappointment.utils.FileExporterUtil;
 import org.openmrs.web.WebConstants;
@@ -47,7 +47,7 @@ public class AppointmentServiceListController extends
 			xprt.exportToCSVFile(request, response, "List of current services");
 		}
 
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 		mav.addObject("services", ias.getServices());
 		mav.addObject("today", Context.getDateFormat().format(new Date()));
 		mav.addObject("creator", Context.getAuthenticatedUser());
@@ -70,7 +70,7 @@ public class AppointmentServiceListController extends
 	private boolean deleteService(HttpServletRequest request, ModelAndView mav)
 			throws Exception {
 
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 
 		if (request.getParameter("deleteService") != null)
 			if (request.getParameter("deleteService").equals("true")) {

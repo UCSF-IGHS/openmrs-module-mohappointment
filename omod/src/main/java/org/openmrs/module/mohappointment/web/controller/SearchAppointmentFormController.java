@@ -11,7 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.AppointmentView;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.openmrs.module.mohappointment.utils.ConstantValues;
 import org.openmrs.module.mohappointment.utils.ContextProvider;
@@ -35,7 +35,7 @@ public class SearchAppointmentFormController extends
         ModelAndView mav = new ModelAndView();
         mav.setViewName(getViewName());
 
-        IAppointmentService ias = Context.getService(IAppointmentService.class);
+        AppointmentService ias = Context.getService(AppointmentService.class);
 
         List<AppointmentView> appointments = (request.getParameter("patient") == null) ? null
                 : getAppointments(request, mav);
@@ -64,7 +64,7 @@ public class SearchAppointmentFormController extends
 
     private List<AppointmentView> getAppointments(HttpServletRequest request,
                                                   ModelAndView mav) {
-        IAppointmentService ias = Context.getService(IAppointmentService.class);
+        AppointmentService ias = Context.getService(AppointmentService.class);
 
         try {
 

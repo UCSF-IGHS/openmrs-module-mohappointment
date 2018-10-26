@@ -26,6 +26,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Concept;
+import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
@@ -621,5 +622,13 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		}
 
 		return appointments;
+	}
+	@Override
+	public  void  voidAppointmentByObs(Obs o){
+		Session session = sessionFactory.getCurrentSession();
+		session.createSQLQuery(
+				"UPDATE moh_appointment SET voided = 1 WHERE reason_obs_id = "
+						+ o.getObsId() + ";").executeUpdate();
+
 	}
 }

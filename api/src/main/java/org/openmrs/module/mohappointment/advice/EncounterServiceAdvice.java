@@ -28,7 +28,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.model.Services;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.openmrs.module.mohappointment.utils.ConstantValues;
 import org.springframework.aop.AfterReturningAdvice;
@@ -126,8 +126,8 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 							appointment.setVoided(false);
 
 							// Saving the appointment
-							IAppointmentService service = Context
-									.getService(IAppointmentService.class);
+							AppointmentService service = Context
+									.getService(AppointmentService.class);
 							service.saveAppointment(appointment);
 
 							encounterId = encounter.getEncounterId().intValue();

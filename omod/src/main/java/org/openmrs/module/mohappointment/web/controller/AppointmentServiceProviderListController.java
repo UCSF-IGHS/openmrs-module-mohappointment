@@ -13,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.FileExporterUtil;
 import org.openmrs.web.WebConstants;
 import org.springframework.web.servlet.ModelAndView;
@@ -55,7 +55,7 @@ public class AppointmentServiceProviderListController extends
 					"List of current service providers");
 		}
 
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 		List<ServiceProviders> providers = (List<ServiceProviders>) ias.getServiceProviders();
 		mav.addObject("serviceProviders", providers);
 		mav.addObject("today", Context.getDateFormat().format(new Date()));
@@ -77,7 +77,7 @@ public class AppointmentServiceProviderListController extends
 	private boolean deleteServiceProvider(HttpServletRequest request,
 			ModelAndView mav) throws Exception {
 
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 
 		if (request.getParameter("deleteSP") != null)
 			if (request.getParameter("deleteSP").equals("true")) {

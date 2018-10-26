@@ -7,7 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 
 /**
  * @author Kamonyo
@@ -35,8 +35,8 @@ public class Attended extends State {
 			log.info(">>>>>> The Attended state was not instantiated");
 
 		// Save to DB here
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 
 		// appointment.setAppointmentState(new AppointmentState(9, "ATTENDED"));
 		service.updateState(appointment, 9);

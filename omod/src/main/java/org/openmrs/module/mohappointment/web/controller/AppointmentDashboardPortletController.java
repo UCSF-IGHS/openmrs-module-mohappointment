@@ -17,18 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.logging.Log;
+
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.openmrs.web.controller.PortletController;
 
 public class AppointmentDashboardPortletController
 		extends PortletController {
 	protected void populateModel(HttpServletRequest request, Map<String, Object> model) {
-		IAppointmentService ias = (IAppointmentService)Context.getService(IAppointmentService.class);
+		AppointmentService ias = (AppointmentService)Context.getService(AppointmentService.class);
 		try {
 			AppointmentUtil.setAttendedAppointment((HttpServletRequest)request);
 			AppointmentUtil.cancelAppointment((HttpServletRequest)request);

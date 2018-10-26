@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 
 /**
  * @author Kamonyo
@@ -36,8 +36,8 @@ public class Upcoming extends State {
 			log.info(">>>>>> The Postponed state was not instantiated");
 
 		// Save to DB here
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 
 		// appointment.setAppointmentState(new AppointmentState(8,
 		// "POSTPONED"));
@@ -57,8 +57,8 @@ public class Upcoming extends State {
 			log.info(">>>>>> The Expired state was not instantiated");
 
 		// Save to DB here
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 
 		// appointment.setAppointmentState(new AppointmentState(6, "EXPIRED"));
 		service.updateState(appointment, 6);
@@ -71,8 +71,8 @@ public class Upcoming extends State {
 		appointment.setState(InAdvance.enter(appointment));
 
 		// Save to DB here
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 
 		appointment.setAppointmentState(new AppointmentState(5, "INADVANCE"));
 		service.updateAppointment(appointment);
@@ -83,8 +83,8 @@ public class Upcoming extends State {
 		// appointment.setState(Waiting.enter(appointment));
 
 		// Save to DB here
-		// IAppointmentService service = Context
-		// .getService(IAppointmentService.class);
+		// AppointmentService service = Context
+		// .getService(AppointmentService.class);
 		//
 		// appointment.setAppointmentState(new AppointmentState(4, "WAITING"));
 		// service.updateAppointment(appointment);
@@ -96,8 +96,8 @@ public class Upcoming extends State {
 		// log.info(">>>>>> The Expired state was not instantiated");
 
 		// Save to DB here
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 
 		// appointment.setAppointmentState(new AppointmentState(4, "WAITING"));
 		// service.updateState(appointment, 4);

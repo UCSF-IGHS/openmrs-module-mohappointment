@@ -15,7 +15,7 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
 import org.openmrs.module.mohappointment.model.Services;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.openmrs.web.WebConstants;
 import org.springframework.web.servlet.ModelAndView;
@@ -74,7 +74,7 @@ public class AppointmentEditServiceProviderController extends
 	 */
 	private boolean editServiceProvider(HttpServletRequest request)
 			throws Exception {
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 
 		ServiceProviders serviceProvider = AppointmentUtil
 				.getServiceProvidersById(Integer.parseInt(request

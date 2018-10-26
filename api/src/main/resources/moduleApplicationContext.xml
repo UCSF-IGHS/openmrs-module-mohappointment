@@ -8,7 +8,7 @@
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
-				<value>org.openmrs.module.mohappointment.service.IAppointmentService</value>
+				<value>org.openmrs.module.mohappointment.service.AppointmentService</value>
 				<bean
 						class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager">
@@ -16,7 +16,7 @@
 					</property>
 					<property name="target">
 						<bean
-								class="org.openmrs.module.mohappointment.impl.AppointmentService">
+								class="org.openmrs.module.mohappointment.impl.AppointmentServiceImpl">
 							<property name="appointmentDAO">
 								<bean
 										class="org.openmrs.module.mohappointment.db.hibernate.HibernateAppointmentDAO">

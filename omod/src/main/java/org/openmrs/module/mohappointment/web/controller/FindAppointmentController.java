@@ -7,8 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
-import org.openmrs.module.mohappointment.statepattern.State;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -41,7 +40,7 @@ public class FindAppointmentController
 	}
 
 	private void saveAppointmentChanges(HttpServletRequest request) {
-		IAppointmentService ias = (IAppointmentService)Context.getService(IAppointmentService.class);
+		AppointmentService ias = (AppointmentService)Context.getService(AppointmentService.class);
 
 		Appointment changedAppointment = ias.getAppointmentById(Integer.valueOf(request.getParameter("appointmentId")).intValue());
 

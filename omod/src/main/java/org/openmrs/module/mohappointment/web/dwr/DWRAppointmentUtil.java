@@ -3,18 +3,14 @@ package org.openmrs.module.mohappointment.web.dwr;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import org.openmrs.Obs;
+
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Person;
-import org.openmrs.PersonName;
-import org.openmrs.api.AdministrationService;
-import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
-import org.openmrs.module.mohappointment.model.AppointmentState;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.web.dwr.PersonListItem;
 
 
@@ -28,7 +24,7 @@ public class DWRAppointmentUtil
 		List<Integer> appointments = null;
 		List<Patient> matchingPatients = findPatientsByIdentifier(searchString);
 
-		IAppointmentService ias = (IAppointmentService)Context.getService(IAppointmentService.class);
+		AppointmentService ias = (AppointmentService)Context.getService(AppointmentService.class);
 		Object[] conditions = { Integer.valueOf(((Patient)matchingPatients.get(0)).getPatientId().intValue()), null, null, null, Boolean.valueOf(false), null, null, null };
 
 		appointments = ias.getAppointmentIdsByMulti(conditions, 50);

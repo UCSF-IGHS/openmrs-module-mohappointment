@@ -13,7 +13,7 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
 import org.openmrs.module.mohappointment.model.Services;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.web.WebConstants;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
@@ -32,7 +32,7 @@ public class AppointmentServiceProviderFormController extends
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName(getViewName());
 
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 		mav.addObject("services", ias.getServices());
 
 		if (request.getParameter("editSP") != null) {
@@ -69,7 +69,7 @@ public class AppointmentServiceProviderFormController extends
 	private boolean saveServiceProvider(HttpServletRequest request)
 			throws Exception {
 
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 		ServiceProviders serviceProvider = null;
 		if (request.getParameter("spId") != null) {
 			if (!request.getParameter("spId").equals(""))
@@ -128,7 +128,7 @@ public class AppointmentServiceProviderFormController extends
 	private void editServiceProvider(HttpServletRequest request,
 			ModelAndView mav) throws Exception {
 
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 
 		if (request.getParameter("editSP") != null) {
 
@@ -161,7 +161,7 @@ public class AppointmentServiceProviderFormController extends
 	 */
 	private boolean providerIsAlreadyAssignedThisService(Person provider,
 			Services service) {
-		IAppointmentService ias = Context.getService(IAppointmentService.class);
+		AppointmentService ias = Context.getService(AppointmentService.class);
 
 		for (ServiceProviders sp : ias.getServiceProviders()) {
 			if (sp.getProvider().equals(provider)

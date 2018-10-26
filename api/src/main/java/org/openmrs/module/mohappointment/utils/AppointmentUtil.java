@@ -24,7 +24,6 @@
  */
 package org.openmrs.module.mohappointment.utils;
 
-import java.io.PrintStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,28 +33,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
-import org.openmrs.ConceptAnswer;
-import org.openmrs.Encounter;
-import org.openmrs.GlobalProperty;
-import org.openmrs.Location;
-import org.openmrs.Obs;
-import org.openmrs.Patient;
-import org.openmrs.Person;
-import org.openmrs.User;
+import org.openmrs.*;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.model.AppointmentView;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
 import org.openmrs.module.mohappointment.model.Services;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 
 public class AppointmentUtil {
     private static Log log = LogFactory.getLog(AppointmentUtil.class);
 
-    public static IAppointmentService getAppointmentService() {
-        return (IAppointmentService)Context.getService(IAppointmentService.class);
+    public static AppointmentService getAppointmentService() {
+        return (AppointmentService)Context.getService(AppointmentService.class);
     }
 
     public static HashMap<Integer, String> createConceptCodedOptions(Integer codedConceptQuestionId) {
@@ -98,7 +89,7 @@ public class AppointmentUtil {
     }
 
     public static Services getServiceByConcept(Concept concept) {
-        IAppointmentService ias = AppointmentUtil.getAppointmentService();
+        AppointmentService ias = AppointmentUtil.getAppointmentService();
         if (ias != null) {
             for (Services service : ias.getServices()) {
                 if (service.getConcept().getConceptId().intValue() != concept.getConceptId().intValue()) continue;
@@ -110,7 +101,7 @@ public class AppointmentUtil {
 
     public static boolean cancelAppointment(HttpServletRequest request) {
         Integer appointmentId = 0;
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         if (request.getParameter("appointmentId") != null && !request.getParameter("appointmentId").equalsIgnoreCase("")) {
             appointmentId = Integer.valueOf(request.getParameter("appointmentId"));
             Appointment appointment = service.getAppointmentById(appointmentId.intValue());
@@ -126,7 +117,7 @@ public class AppointmentUtil {
 
     public static boolean setAttendedAppointment(HttpServletRequest request) {
         Integer appointmentId = 0;
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         if (request.getParameter("appointmentId") != null && !request.getParameter("appointmentId").equalsIgnoreCase("")) {
             appointmentId = Integer.valueOf(request.getParameter("appointmentId"));
             Appointment appointment = service.getAppointmentById(appointmentId.intValue());
@@ -153,7 +144,7 @@ public class AppointmentUtil {
 
     public static List<Appointment> getTodayAppointmentsForProvider(User authUser, Date startDate, Date endDate, Services selectedService) {
         List appointments = new ArrayList<Appointment>();
-        IAppointmentService ias = AppointmentUtil.getAppointmentService();
+        AppointmentService ias = AppointmentUtil.getAppointmentService();
         List services = null;
         Services servise = null;
         if (authUser.getPerson().getPersonId() > 1) {
@@ -171,7 +162,7 @@ public class AppointmentUtil {
         return appointments;
     }
 
-    private static List<Appointment> getFilteredBySelectedService(User authUser, Date startDate, Date endDate, Services selectedService, IAppointmentService ias) {
+    private static List<Appointment> getFilteredBySelectedService(User authUser, Date startDate, Date endDate, Services selectedService, AppointmentService ias) {
         //ArrayList appointments2;
         ArrayList appointments2;
         List<Integer> waitingAppointmentIds = new ArrayList<Integer>();
@@ -195,7 +186,7 @@ public class AppointmentUtil {
         return appointments2;
     }
 
-    private static List<Appointment> getWhereProviderWorksInOneService(User authUser, Date startDate, Date endDate, IAppointmentService ias, Services servise) {
+    private static List<Appointment> getWhereProviderWorksInOneService(User authUser, Date startDate, Date endDate, AppointmentService ias, Services servise) {
         if (authUser.getPerson().getPersonId() > 1) {
             servise = ias.getServiceByProvider(authUser.getPerson());
         }
@@ -203,7 +194,7 @@ public class AppointmentUtil {
         return appointments;
     }
 
-    private static List<Appointment> getNoSelectedService(User authUser, Date startDate, Date endDate, List<Appointment> appointments, IAppointmentService ias, List<Services> services) {
+    private static List<Appointment> getNoSelectedService(User authUser, Date startDate, Date endDate, List<Appointment> appointments, AppointmentService ias, List<Services> services) {
         List<Integer> waitingAppointmentIds = new ArrayList<Integer>();
         for (Services serv : services) {
             Object[] arrobject = new Object[8];
@@ -244,52 +235,52 @@ public class AppointmentUtil {
     }
 
     public static void saveWaitingAppointment(Appointment appointment) {
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         appointment.setAppointmentState(new AppointmentState(Integer.valueOf(4), "WAITING"));
         service.saveAppointment(appointment);
     }
 
     public static void saveAttendedAppointment(Appointment appointment) {
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         appointment.setAppointmentState(new AppointmentState(Integer.valueOf(9), "ATTENDED"));
         appointment.setAttended(Boolean.valueOf(true));
         service.saveAppointment(appointment);
     }
 
     public static void saveUpcomingAppointment(Appointment appointment) {
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         appointment.setAppointmentState(new AppointmentState(Integer.valueOf(3), "UPCOMING"));
         service.saveAppointment(appointment);
     }
 
     public static Appointment getWaitingAppointmentById(int id) {
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         return service.getAppointmentById(id);
     }
 
     public static void editServiceProvider(ServiceProviders serviceProvider) {
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         service.saveServiceProviders(serviceProvider);
     }
 
     public static List<Services> getAllServices() {
-        IAppointmentService services = AppointmentUtil.getAppointmentService();
+        AppointmentService services = AppointmentUtil.getAppointmentService();
         return (List)services.getServices();
     }
 
     public static List<ServiceProviders> getAllServiceProviders() {
-        IAppointmentService serviceProviders = AppointmentUtil.getAppointmentService();
+        AppointmentService serviceProviders = AppointmentUtil.getAppointmentService();
         return (List)serviceProviders.getServiceProviders();
     }
 
     public static ServiceProviders getServiceProvidersById(int id) {
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         return service.getServiceProviderById(id);
     }
 
     public static List<Appointment> getAppointmentsByPatientAndDate(Patient patient, Services clinicalService, Date date) {
         ArrayList<Appointment> appointments;
-        IAppointmentService service = AppointmentUtil.getAppointmentService();
+        AppointmentService service = AppointmentUtil.getAppointmentService();
         Object[] arrobject = new Object[8];
         arrobject[0] = patient.getPatientId();
         arrobject[3] = date;
@@ -310,7 +301,7 @@ public class AppointmentUtil {
     }
 
     public static Boolean isPatientAlreadyWaitingThere(Patient patient, AppointmentState state, Services service, Date appointmentDate) throws ParseException {
-        IAppointmentService appointmentService = AppointmentUtil.getAppointmentService();
+        AppointmentService appointmentService = AppointmentUtil.getAppointmentService();
         if (appointmentService.getAllWaitingAppointmentsByPatient(patient, state, appointmentDate) != null) {
             for (Appointment appointment : appointmentService.getAllWaitingAppointmentsByPatient(patient, state, appointmentDate)) {
                 if (!appointment.getService().equals((Object)service)) continue;
@@ -321,7 +312,7 @@ public class AppointmentUtil {
     }
 
     public static Collection<Appointment> getAllWaitingAppointmentsByPatientAtService(Patient patient, AppointmentState state, Date appointmentDate, Services service) throws ParseException {
-        IAppointmentService appointmentService = AppointmentUtil.getAppointmentService();
+        AppointmentService appointmentService = AppointmentUtil.getAppointmentService();
         ArrayList<Appointment> appointments = new ArrayList<Appointment>();
         for (Appointment appointment : appointmentService.getAllWaitingAppointmentsByPatient(patient, state, appointmentDate)) {
             if (appointment.getService().getServiceId().intValue() != service.getServiceId().intValue()) continue;
@@ -344,7 +335,7 @@ public class AppointmentUtil {
     public static List<Person> getProvidersByService(Services service) {
         if (service != null) {
             ArrayList<Person> providers = new ArrayList<Person>();
-            IAppointmentService appService = AppointmentUtil.getAppointmentService();
+            AppointmentService appService = AppointmentUtil.getAppointmentService();
             for (Integer id : appService.getPersonsByService(service)) {
                 providers.add(Context.getPersonService().getPerson(id));
             }
@@ -368,5 +359,9 @@ public class AppointmentUtil {
     public static Location getDefaultLocation() {
         Integer locationId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mohtracportal.defaultLocationId"));
         return Context.getLocationService().getLocation(locationId);
+    }
+
+    public  static void voidAppointmentByObs(Obs o){
+        AppointmentUtil.getAppointmentService().voidAppointmentByObs(o);
     }
 }

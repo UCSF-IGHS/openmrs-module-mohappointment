@@ -26,7 +26,7 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
 import org.openmrs.module.mohappointment.model.Services;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,8 +56,8 @@ public class AppointmentDashboardByProviderFormController extends
 				.getLocationService().getDefaultLocation() : "-");
 		mav.addObject("todayDate", new Date());
 
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 
 		// filtering the Waiting Appointments
 		filterWaitingAppointments(request, mav, authUser, service);
@@ -76,10 +76,10 @@ public class AppointmentDashboardByProviderFormController extends
 	 * @param authUser
 	 *            the Provider
 	 * @param service
-	 *            the IAppointmentService
+	 *            the AppointmentService
 	 */
 	private void getUpcomingAppointments(ModelAndView mav, User authUser,
-			IAppointmentService service) {
+			AppointmentService service) {
 		Object[] conditionsUpcomingAppointment = { null,
 				authUser.getPerson().getPersonId(), null, null, null, null, 3,
 				null };
@@ -105,10 +105,10 @@ public class AppointmentDashboardByProviderFormController extends
 	 * @param authUser
 	 *            the Provider
 	 * @param service
-	 *            the IAppointmentService
+	 *            the AppointmentService
 	 */
 	private void filterWaitingAppointments(HttpServletRequest request,
-			ModelAndView mav, User authUser, IAppointmentService service) {
+			ModelAndView mav, User authUser, AppointmentService service) {
 		String display = "none";
 		// By default at the first display, we don't expect to filter waiting
 		// list!

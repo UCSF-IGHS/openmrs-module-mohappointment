@@ -5,13 +5,12 @@ package org.openmrs.module.mohappointment.web.controller;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.openmrs.Person;
-import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
 import org.openmrs.module.mohappointment.model.Services;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
@@ -55,7 +54,7 @@ public class AppointmentServiceFormController
 	private boolean saveService(HttpServletRequest request)
 			throws Exception
 	{
-		IAppointmentService ias = (IAppointmentService)Context.getService(IAppointmentService.class);
+		AppointmentService ias = (AppointmentService)Context.getService(AppointmentService.class);
 
 		Services service = null;
 		if ((request.getParameter("servId") != null) &&
@@ -105,7 +104,7 @@ public class AppointmentServiceFormController
 	private void editService(HttpServletRequest request, ModelAndView mav)
 			throws Exception
 	{
-		IAppointmentService ias = (IAppointmentService)Context.getService(IAppointmentService.class);
+		AppointmentService ias = (AppointmentService)Context.getService(AppointmentService.class);
 
 		if (request.getParameter("editService") != null)
 		{
@@ -118,7 +117,7 @@ public class AppointmentServiceFormController
 	}
 	private boolean providerIsAlreadyAssignedThisService(Person provider, Services service)
 	{
-		IAppointmentService ias = (IAppointmentService)Context.getService(IAppointmentService.class);
+		AppointmentService ias = (AppointmentService)Context.getService(AppointmentService.class);
 
 		for (ServiceProviders sp : ias.getServiceProviders()) {
 			if ((sp.getProvider().equals(provider)) &&

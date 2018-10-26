@@ -7,7 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 
 /**
  * @author Kamonyo
@@ -36,8 +36,8 @@ public class Confirmed extends State {
 
 		// Declaring a service from the OpenMRS.Context
 
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 		// 1. Find a way of keeping the State of any appointment up to date
 		// (from DB)
 		// 2. Trying to update the AppointmentState in the DB.

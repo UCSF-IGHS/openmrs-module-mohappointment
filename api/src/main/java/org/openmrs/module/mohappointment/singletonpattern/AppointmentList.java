@@ -24,7 +24,7 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
-import org.openmrs.module.mohappointment.service.IAppointmentService;
+import org.openmrs.module.mohappointment.service.AppointmentService;
 
 /**
  *	
@@ -62,8 +62,8 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * @return the last appointmentId
 	 */
 	private Integer getLastAppointmentId() {
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 		return service.lastAppointmentId();
 	}
 
@@ -220,8 +220,8 @@ public class AppointmentList extends ArrayList<Appointment> {
 	public boolean addAppointment(Appointment appointment) {
 		// Uncomment when you are done with testing on SingletonDriver.java
 
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 		service.saveAppointment(appointment);
 		appointment.setAppointmentId(getLastAppointmentId() + 1);
 		return appointmentList.add(appointment);
@@ -235,8 +235,8 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 */
 
 	public boolean cancelAppointment(Appointment appointment) {
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
+		AppointmentService service = Context
+				.getService(AppointmentService.class);
 		service.cancelAppointment(appointment);
 		return appointmentList.remove(appointment);
 	}
@@ -250,8 +250,8 @@ public class AppointmentList extends ArrayList<Appointment> {
 
 	public void updateAppointment(Appointment appointment) {
 
-		IAppointmentService appointService = Context
-				.getService(IAppointmentService.class);
+		AppointmentService appointService = Context
+				.getService(AppointmentService.class);
 
 		appointService.updateAppointment(appointment);
 
