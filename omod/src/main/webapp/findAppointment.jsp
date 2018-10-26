@@ -5,6 +5,7 @@
 
 <openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
 
+<openmrs:htmlInclude file="/moduleResources/mohappointment/scripts/jquery-1.3.2.js" />
 <openmrs:htmlInclude file="/moduleResources/mohappointment/scripts/jquery.bigframe.js" />
 <openmrs:htmlInclude file="/moduleResources/mohappointment/scripts/ui/ui.core.js" />
 <openmrs:htmlInclude file="/moduleResources/mohappointment/scripts/ui/ui.dialog.js" />
@@ -120,4 +121,6 @@
 		$app("#n_1").focus();
 	});
 </script>
+
+
 <%@ include file="/WEB-INF/template/footer.jsp"%>

@@ -14,9 +14,7 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
-import org.openmrs.module.mohappointment.model.Services;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
-import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.openmrs.web.dwr.PersonListItem;
 
 
@@ -31,17 +29,17 @@ public class DWRAppointmentUtil
 		List<Patient> matchingPatients = findPatientsByIdentifier(searchString);
 
 		IAppointmentService ias = (IAppointmentService)Context.getService(IAppointmentService.class);
-		Object[] conditions = {
-				Integer.valueOf(((Patient)matchingPatients.get(0)).getPatientId().intValue()),
-				0, 0, 0, Boolean.valueOf(false) };
+		Object[] conditions = { Integer.valueOf(((Patient)matchingPatients.get(0)).getPatientId().intValue()), null, null, null, Boolean.valueOf(false), null, null, null };
+
 		appointments = ias.getAppointmentIdsByMulti(conditions, 50);
+
 
 		StringBuilder sb = new StringBuilder("");
 		sb.append("<table class='openmrsSearchTable' cellpadding=2 cellspacing=0 style='width:100%; font-size:0.8em'>");
-		sb.append("<tr><td colspan='12' style='text-align:right; font-style:italic;'>Results for &quot;" +
-				id + "&quot;: " + appointments.size() + " appointments</tr>");
-		sb.append("<tr class='oddRow'><th>#</th><th>Identifier</th><th>Patient Names</th><th>Age</th><th>Gender</th><th></th><th>Birthdate</th><th>Appointment Date</th><th>Provider</th><th>Reason of Appointment</th><th>Clinical Area to See</th><th>State</th><th></th><th></th><th></th></tr>");
 
+		sb.append("<tr><td colspan='12' style='text-align:right; font-style:italic;'>Results for &quot;" + id + "&quot;: " + appointments.size() + " appointments</tr>");
+
+		sb.append("<tr class='oddRow'><th>#</th><th>Identifier</th><th>Patient Names</th><th>Age</th><th>Gender</th><th></th><th>Birthdate</th><th>Appointment Date</th><th>Provider</th><th>Reason of Appointment</th><th>State</th><th></th><th></th></tr>");
 
 		int i = 0;
 		for (Integer appId : appointments) {
@@ -57,93 +55,63 @@ public class DWRAppointmentUtil
 			ret.setBirthdate(ps.getBirthdate());
 			ret.setBirthdateEstimated(ps.getBirthdateEstimated());
 			String identifier = "";
-			identifier = ps.isPatient() ? ((Patient)ps)
-					.getPatientIdentifier().getIdentifier() : "";
+			identifier = ps.isPatient() ? ((Patient)ps).getPatientIdentifier().getIdentifier() : "";
 
-			String name = (ret.getGivenName() != null ? ret.getGivenName()
-					.trim() : "") +
-					"&nbsp;" + (
-					ret.getMiddleName() != null ? ret.getMiddleName()
-							.trim() : "") +
-					"&nbsp;" + (
-					ret.getFamilyName() != null ? ret.getFamilyName()
-							.trim() : "");
-			String provName = " - ";
-			if (app.getProvider() != null) {
-				provName = app.getProvider().getPersonName().toString();
-			}
-			String appDate = new SimpleDateFormat("dd-MMM-yyyy").format(app
-					.getAppointmentDate());
+
+			String name = (ret.getGivenName() != null ? ret.getGivenName().trim() : "") + "&nbsp;" + (ret.getMiddleName() != null ? ret.getMiddleName().trim() : "") + "&nbsp;" + (ret.getFamilyName() != null ? ret.getFamilyName().trim() : "");
+
+
+			String provName = app.getProvider().getPersonName().toString();
+			String appDate = new SimpleDateFormat("dd-MMM-yyyy").format(app.getAppointmentDate());
+
 			String reason = "";
-			String service = "";
-			if (app.getReason() != null)
+			if ((app.getReason() != null) && (!app.getReason().getValueAsString(Context.getLocale()).equals("")))
 			{
-				if (!app.getReason().getValueAsString(Context.getLocale()).equals(""))
-				{
-					reason = app.getReason().getValueAsString(Context.getLocale());
 
-					Services serviceToSee = AppointmentUtil.getServiceByConcept(app.getReason()
-							.getValueCoded());
-
-					if (serviceToSee != null)
-						service = serviceToSee.getName();
-				}
+				reason = app.getReason().getValueAsString(Context.getLocale());
 			}
-			sb.append("<tr class='searchRow " + (i % 2 == 0 ? "oddRow" : "") +
-					"'>");
+
+
+
+
+			sb.append("<tr class='searchRow " + (i % 2 == 0 ? "oddRow" : "") + "'>");
+
 			sb.append("<td class='searchIndex'>" + i + ".</td>");
 			sb.append("<td class='patientIdentifier'>" + identifier + "</td>");
 			sb.append("<td>" + name + "</td>");
 			sb.append("<td style='text-align:center'>" + ps.getAge() + "</td>");
 			if (ret.getGender().trim().compareToIgnoreCase("f") == 0) {
 				sb.append("<td style='text-align:center'><img src='../../images/female.gif'/></td>");
-			} else
+			}
+			else {
 				sb.append("<td style='text-align:center'><img src='../../images/male.gif'/></td>");
-			sb.append("<td>" + (ret.getBirthdateEstimated().booleanValue() ? "&asymp;" : "") +
-					"</td>");
-			sb.append("<td>" +
-					new SimpleDateFormat("dd-MMM-yyyy").format(ret
-							.getBirthdate()) + "</td>");
+			}
+			sb.append("<td>" + (ret.getBirthdateEstimated().booleanValue() ? "&asymp;" : "") + "</td>");
+
+			sb.append("<td>" + new SimpleDateFormat("dd-MMM-yyyy").format(ret.getBirthdate()) + "</td>");
+
+
 			sb.append("<td>" + appDate + "</td>");
 			sb.append("<td>" + app.getProvider().getPersonName() + "</td>");
 			sb.append("<td>" + reason + "</td>");
-			sb.append("<td>" + service + "</td>");
-			sb.append("<td>" + app.getAppointmentState().getDescription() +
-					"</td>");
-			sb.append("<td onclick=showDialog('" +
-					app.getAppointmentId() +
-					"','" +
-					name.replace(" ", "&nbsp;") +
-					"','" +
-					provName.replace(" ", "&nbsp;") +
-					"','" +
-					appDate +
-					"','" +
-					reason.replace(" ", "&nbsp;") +
-					"',1)><input type='button' value='WAITING/INADVANCE'/></td>");
-			sb.append("<td onclick=showDialog('" + app.getAppointmentId() +
-					"','" + name.replace(" ", "&nbsp;") + "','" +
-					provName.replace(" ", "&nbsp;") + "','" + appDate + "','" +
-					reason.replace(" ", "&nbsp;") +
-					"',3)><input type='button' value='POSTPONE'/></td>");
-			sb.append("<td onclick=showDialog('" + app.getAppointmentId() +
-					"','" + name.replace(" ", "&nbsp;") + "','" +
-					provName.replace(" ", "&nbsp;") + "','" + appDate + "','" +
-					reason.replace(" ", "&nbsp;") +
-					"',2)><input type='button' value='Edit Service'/></td>");
+			sb.append("<td>" + app.getAppointmentState().getDescription() + "</td>");
+
+			sb.append("<td onclick=showDialog('" + app.getAppointmentId() + "','" + name.replace(" ", "&nbsp;") + "','" + provName.replace(" ", "&nbsp;") + "','" + appDate + "','" + reason.replace(" ", "&nbsp;") + "',1)><input type='button' value='WAITING/INADVANCE'/></td>");
+
+			sb.append("<td onclick=showDialog('" + app.getAppointmentId() + "','" + name.replace(" ", "&nbsp;") + "','" + provName.replace(" ", "&nbsp;") + "','" + appDate + "','" + reason.replace(" ", "&nbsp;") + "',2)><input type='button' value='POSTPONE'/></td>");
+
 			sb.append("</tr>");
 		}
 		sb.append("</table>");
 
 		return sb.toString();
 	}
-
 	private List<Patient> findPatientsByIdentifier(String search)
 	{
 		PatientIdentifierType preferredIdentifierType = getPrimaryPatientIdentiferType();
-		List<PatientIdentifier> ids = Context.getPatientService()
-				.getPatientIdentifiers(search,
-						getPatientIdentifierTypesToUse(), null, null, null);
+		List<PatientIdentifier> ids = Context.getPatientService().getPatientIdentifiers(search, getPatientIdentifierTypesToUse(), null, null, null);
+
+
 		List<Patient> ret = new ArrayList();
 
 
@@ -167,35 +135,38 @@ public class DWRAppointmentUtil
 	private PatientIdentifierType getPrimaryPatientIdentiferType() {
 		PatientIdentifierType pit = null;
 		try {
-			pit =
+			pit = Context.getPatientService().getPatientIdentifierType(Integer.valueOf(Context.getAdministrationService().getGlobalProperty("registration.primaryIdentifierType")));
 
-					Context.getPatientService().getPatientIdentifierType(
-							Integer.valueOf(
-									Context.getAdministrationService()
-											.getGlobalProperty(
-													"registration.primaryIdentifierType")));
-		} catch (Exception ex) {
-			pit =
 
-					Context.getPatientService().getPatientIdentifierTypeByName(
-							Context.getAdministrationService()
-									.getGlobalProperty(
-											"registration.primaryIdentifierType"));
+
 		}
+		catch (Exception ex)
+		{
+
+
+			pit = Context.getPatientService().getPatientIdentifierTypeByName(Context.getAdministrationService().getGlobalProperty("registration.primaryIdentifierType"));
+		}
+
+
+
+
+
+
 		if (pit == null) {
-			throw new RuntimeException(
-					"Cannot find patient identifier type specified by global property registration.primaryIdentifierType");
+			throw new RuntimeException("Cannot find patient identifier type specified by global property registration.primaryIdentifierType");
 		}
+
 
 		return pit;
 	}
+
 	private List<PatientIdentifierType> getPatientIdentifierTypesToUse()
 	{
 		List<PatientIdentifierType> ret = new ArrayList();
 		ret.add(getPrimaryPatientIdentiferType());
 
-		String s = Context.getAdministrationService().getGlobalProperty(
-				"registration.otherIdentifierTypes");
+		String s = Context.getAdministrationService().getGlobalProperty("registration.otherIdentifierTypes");
+
 		if (s != null) {
 			String[] ids = s.split(",");
 			for (String idAsString : ids) {
@@ -206,30 +177,29 @@ public class DWRAppointmentUtil
 						PatientIdentifierType idType = null;
 						try {
 							Integer id = Integer.valueOf(idAsString);
-							idType = Context.getPatientService()
-									.getPatientIdentifierType(id);
-						} catch (Exception ex) {
-							idType =
-									Context.getPatientService().getPatientIdentifierTypeByName(idAsString);
+							idType = Context.getPatientService().getPatientIdentifierType(id);
 						}
+						catch (Exception ex) {
+							idType = Context.getPatientService().getPatientIdentifierTypeByName(idAsString);
+						}
+
 						if (idType == null) {
-							throw new IllegalArgumentException(
-									"Cannot find patient identifier type " +
-											idAsString +
-											" specified in global property " +
-											"registration.otherIdentifierTypes");
+							throw new IllegalArgumentException("Cannot find patient identifier type " + idAsString + " specified in global property " + "registration.otherIdentifierTypes");
 						}
+
+
+
+
 						if (!ret.contains(idType))
 							ret.add(idType);
 					}
 				} catch (Exception ex) {
-					throw new IllegalArgumentException(
-							"Error in global property registration.otherIdentifierTypes near '" +
-
-									idAsString + "'");
+					throw new IllegalArgumentException("Error in global property registration.otherIdentifierTypes near '" + idAsString + "'");
 				}
 			}
 		}
+
+
 		return ret;
 	}
 }

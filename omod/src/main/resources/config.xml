@@ -3,10 +3,10 @@
 
 <module configVersion="1.2">
 	<!-- MoH Appointment Module Properties -->
-	<id>@MODULE_ID@</id>
-	<name>@MODULE_NAME@</name>
-	<version>@MODULE_VERSION@</version>
-	<package>@MODULE_PACKAGE@</package>
+	<id>mohappointment</id>
+	<name>Appointment Management</name>
+	<version>0.3-SNAPSHOT</version>
+	<package>org.openmrs.module.mohappointment</package>
 	<author>MoH-Rwanda</author>
 	<description>
 		Appointment Module. Useful for managing patient and
@@ -14,22 +14,22 @@
 		to plan encounters.
 	</description>
 
-	<activator>@MODULE_PACKAGE@.model.AppointmentActivator</activator>
+	<activator>org.openmrs.module.mohappointment.model.AppointmentActivator</activator>
 
-	<require_version>${openMRSVersion}</require_version>
+	<require_version>1.9.11</require_version>
 
 	<extension>
 		<point>org.openmrs.tracmodule.list</point>
-		<class>@MODULE_PACKAGE@.extension.html.AdminList</class>
+		<class>org.openmrs.module.mohappointment.extension.html.AdminList</class>
 	</extension>
 	<extension>
 		<point>org.openmrs.patientDashboardTab</point>
-		<class>@MODULE_PACKAGE@.extension.html.AppointmentDashboardTab</class>
+		<class>org.openmrs.module.mohappointment.extension.html.AppointmentDashboardTab</class>
 	</extension>
 
 	<extension>
 		<point>org.openmrs.gutter.tools</point>
-		<class>@MODULE_PACKAGE@.extension.html.AppointmentGutterLink</class>
+		<class>org.openmrs.module.mohappointment.extension.html.AppointmentGutterLink</class>
 	</extension>
 
 	<privilege>
