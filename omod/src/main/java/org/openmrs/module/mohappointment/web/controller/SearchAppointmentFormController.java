@@ -1,8 +1,6 @@
 package org.openmrs.module.mohappointment.web.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,9 +90,9 @@ public class SearchAppointmentFormController extends
                     .getParameter("stateofappointment").trim().compareTo("") != 0) ? request
                     .getParameter("stateofappointment")
                     : null;
-            Integer reasonOfApp = (request.getParameter("reasonofappointment") != null && request
-                    .getParameter("reasonofappointment").trim().compareTo("") != 0) ? Integer
-                    .valueOf(request.getParameter("reasonofappointment"))
+            Integer reasonOfApp = (request.getParameter("clinicalareatosee") != null && request
+                    .getParameter("clinicalareatosee").trim().compareTo("") != 0) ? Integer
+                    .valueOf(request.getParameter("clinicalareatosee"))
                     : null;
 
             mav.addObject("parameters", createAdditionalParameters(patientId,
@@ -117,12 +115,25 @@ public class SearchAppointmentFormController extends
                                 .getAppointmentById(appointmentId)));
             }
 
+            Collections.sort(appointments, new Sortbyroll());
+
             return appointments;
         } catch (Exception e) {
             log.error("------------------------ " + e.getMessage()
                     + " -------------------------");
             e.printStackTrace();
             return new ArrayList<AppointmentView>();
+        }
+
+    }
+
+    class Sortbyroll implements Comparator<AppointmentView>
+    {
+        // Used for sorting in ascending order of
+        // roll number
+        public int compare(AppointmentView a, AppointmentView b)
+        {
+            return a.getAppointmentId() - b.getAppointmentId();
         }
     }
 

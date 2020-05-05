@@ -41,6 +41,8 @@
 		<table class="list_data">
 			<tr>
 				<th class="columnHeader"><spring:message code="mohappointment.general.appointmentdate"/></th>
+				<!-- <th class="columnHeader">Appointment ID</th> -->
+
 				<th class="columnHeader"><spring:message code="mohappointment.general.number"/></th>
 				<th class="columnHeader"><spring:message code="mohappointment.general.identifier"/></th>
 				<th class="columnHeader"><spring:message code="mohappointment.general.names"/></th>
@@ -67,6 +69,7 @@
 					   	<td class="rowValue" style="border-top: 1px solid cadetblue; <c:if test="${index%2!=0}">background-color: whitesmoke;</c:if>"><c:if test="${appointment.appointmentDate!=currentDate}"><openmrs:formatDate date="${appointment.appointmentDate}" type="medium"/><c:set value="${appointment.appointmentDate}" var="currentDate"/></c:if></td>
 					  </c:otherwise>
 					</c:choose>
+					<%-- <td class="rowValue ${status.count%2!=0?'even':''}">${appointment.appointmentId}</td> --%>
 					<td class="rowValue ${status.count%2!=0?'even':''}">${((param.page-1)*pageSize)+status.count}.</td>
 					<td class="rowValue ${status.count%2!=0?'even':''}">${appointment.patient.patientIdentifier}</td>
 					<td class="rowValue ${status.count%2!=0?'even':''}"><a href="<openmrs:contextPath/>/patientDashboard.form?patientId=${appointment.patient.patientId}">${appointment.patient.personName}</a></td>
