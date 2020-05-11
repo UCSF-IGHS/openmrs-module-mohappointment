@@ -3,11 +3,11 @@
 
 <module configVersion="1.2">
 	<!-- MoH Appointment Module Properties -->
-	<id>mohappointment</id>
-	<name>Appointment Management</name>
-	<version>0.3-SNAPSHOT</version>
-	<package>org.openmrs.module.mohappointment</package>
-	<author>MoH-Rwanda</author>
+	<id>@MODULE_ID@</id>
+	<name>@MODULE_NAME@</name>
+	<version>@MODULE_VERSION@</version>
+	<package>@MODULE_PACKAGE@</package>
+	<author>MoH/RBC-Rwanda</author>
 	<description>
 		Appointment Module. Useful for managing patient and
 		provider appointments in order
@@ -17,6 +17,10 @@
 	<activator>org.openmrs.module.mohappointment.model.AppointmentActivator</activator>
 
 	<require_version>1.9.11</require_version>
+
+	<aware_of_modules>
+		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
+	</aware_of_modules>
 
 	<extension>
 		<point>org.openmrs.tracmodule.list</point>

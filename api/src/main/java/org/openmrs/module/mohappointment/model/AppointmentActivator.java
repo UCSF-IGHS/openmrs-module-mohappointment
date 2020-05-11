@@ -16,27 +16,28 @@ package org.openmrs.module.mohappointment.model;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.Activator;
+import org.openmrs.module.BaseModuleActivator;
 
 /**
  * This class contains the logic that is run every time this module is either
  * started or shutdown
  */
-public class AppointmentActivator implements Activator {
+public class AppointmentActivator extends BaseModuleActivator {
 
-	private Log log = LogFactory.getLog(this.getClass());
+	protected Log log = LogFactory.getLog(this.getClass());
 
 	/**
-	 * @see org.openmrs.module.Activator#startup()
-	 */
-	public void startup() {
-		log.info("Starting MoH-Appointment Module");
+	 * @see BaseModuleActivator#started()
+	 * */
+	public void started() {
+		log.info("MoH-Appointment Module started");
 	}
 
 	/**
-	 * @see org.openmrs.module.Activator#shutdown()
-	 */
-	public void shutdown() {
-		log.info("Shutting down MoH-Appointment Module");
+	 *  @see BaseModuleActivator#stopped()
+	 * */
+	public void stopped() {
+		log.info("MoH-Appointment Module stopped");
 	}
 
 }
