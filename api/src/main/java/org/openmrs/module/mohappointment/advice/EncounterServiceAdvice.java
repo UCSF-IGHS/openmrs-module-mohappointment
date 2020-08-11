@@ -103,9 +103,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 							appointment.setPatient(encounter.getPatient());
 							appointment.setLocation(encounter.getLocation());
 							appointment.setProvider(Context.getPersonService()
-									.getPerson(
-											encounter.getProvider()
-													.getPersonId()));
+									.getPerson(AppointmentUtil.getEncounterProvider(encounter).getPerson().getPersonId()));
 							appointment.setService(serv);
 							appointment.setEncounter(encounter);
 							appointment.setAppointmentDate(encounter
@@ -199,7 +197,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 					// Setting the appointment attributes
 					appointment.setPatient(encounter.getPatient());
 					appointment.setLocation(encounter.getLocation());
-					appointment.setProvider(encounter.getProvider());
+					appointment.setProvider(AppointmentUtil.getEncounterProvider(encounter).getPerson());
 					appointment.setEncounter(encounter);
 					appointment.setAppointmentDate(nextVisitDate
 							.getValueDatetime());
