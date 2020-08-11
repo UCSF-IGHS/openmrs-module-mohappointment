@@ -42,7 +42,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<openMRSVersion>1.9.11</openMRSVersion>
+		<openMRSVersion>2.3.0</openMRSVersion>
 		<MODULE_ID>${project.parent.artifactId}</MODULE_ID>
 		<MODULE_NAME>Appointment Management</MODULE_NAME>
 		<MODULE_VERSION>${project.parent.version}</MODULE_VERSION>

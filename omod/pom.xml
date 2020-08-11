@@ -17,6 +17,13 @@
 			<artifactId>mohappointment-api</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>legacyui-omod</artifactId>
+            <version>1.6.0</version>
+            <scope>provided</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
