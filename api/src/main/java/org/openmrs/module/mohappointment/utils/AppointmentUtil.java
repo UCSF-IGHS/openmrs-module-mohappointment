@@ -364,4 +364,14 @@ public class AppointmentUtil {
     public  static void voidAppointmentByObs(Obs o){
         AppointmentUtil.getAppointmentService().voidAppointmentByObs(o);
     }
+    
+    public  static Provider getEncounterProvider(Encounter e){
+    	Provider provider = null;
+    	if(e != null && e.getEncounterProviders().size() > 0) {
+    		provider = (e.getEncounterProviders().iterator().next()).getProvider();
+    	}else {
+    		provider = Context.getProviderService().getUnknownProvider();
+    	}
+    	return provider;
+    }
 }

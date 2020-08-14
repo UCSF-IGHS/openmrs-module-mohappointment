@@ -2,10 +2,9 @@ package org.openmrs.module.mohappointment.extension.html;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.openmrs.User;
+
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Extension;
-import org.openmrs.module.Extension.MEDIA_TYPE;
 import org.openmrs.module.web.extension.AdministrationSectionExt;
 
 

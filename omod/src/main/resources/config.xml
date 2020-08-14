@@ -16,7 +16,7 @@
 
 	<activator>org.openmrs.module.mohappointment.model.AppointmentActivator</activator>
 
-	<require_version>1.9.11</require_version>
+	<require_version>${openMRSVersion}</require_version>
 
 	<aware_of_modules>
 		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>

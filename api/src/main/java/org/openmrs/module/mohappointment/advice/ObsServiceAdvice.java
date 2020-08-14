@@ -96,7 +96,7 @@ public class ObsServiceAdvice implements AfterReturningAdvice {
 					appointment.setPatient(Context.getPatientService()
 							.getPatient(obs.getPersonId()));
 					appointment.setLocation(obs.getLocation());
-					appointment.setProvider(obs.getEncounter().getProvider());
+					appointment.setProvider(AppointmentUtil.getEncounterProvider(obs.getEncounter()).getPerson());
 					appointment.setEncounter(obs.getEncounter());
 					appointment.setAppointmentDate(nextVisitDate
 							.getValueDatetime());
@@ -183,8 +183,7 @@ public class ObsServiceAdvice implements AfterReturningAdvice {
 						appointment.setPatient(encounter.getPatient());
 						appointment.setLocation(encounter.getLocation());
 						appointment.setProvider(Context.getPersonService()
-								.getPerson(
-										encounter.getProvider().getPersonId()));
+								.getPerson(AppointmentUtil.getEncounterProvider(encounter).getPerson().getPersonId()));
 						appointment.setService(serv);
 						appointment.setEncounter(encounter);
 						appointment.setAppointmentDate(encounter

@@ -1,0 +1,17 @@
+.project
+.settings/
+.svn/
+api/.classpath
+api/.gitignore
+api/.project
+api/.settings/
+omod/.classpath
+omod/.gitignore
+omod/.project
+omod/.settings/
+api/target/
+omod/target/
+*.iml
+.idea/
+.idea/libraries/*.*
+

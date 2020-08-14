@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Obs;
+import org.openmrs.OrderType;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.SimplifiedObs;
@@ -52,8 +53,7 @@ public class AppointmentPatientSummaryFormController extends
 		Patient pt = Context.getPatientService().getPatient(
 				Integer.valueOf(request.getParameter("patientId")));
 		mav.addObject("patient", pt);
-		mav.addObject("dOrders", Context.getOrderService()
-				.getDrugOrdersByPatient(pt));
+		mav.addObject("dOrders", Context.getOrderService().getOrders(pt, null, Context.getOrderService().getOrderTypeByUuid(OrderType.DRUG_ORDER_TYPE_UUID), false));
 
 		List<Concept> concList = new ArrayList<Concept>();
 		concList.add(Context.getConceptService().getConcept(2169));
