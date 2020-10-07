@@ -25,7 +25,7 @@ public class DWRAppointmentUtil
 		List<Patient> matchingPatients = findPatientsByIdentifier(searchString);
 
 		AppointmentService ias = (AppointmentService)Context.getService(AppointmentService.class);
-		Object[] conditions = { Integer.valueOf(((Patient)matchingPatients.get(0)).getPatientId().intValue()), null, null, null, Boolean.valueOf(false), null, null, null };
+		Object[] conditions = { matchingPatients.size() > 0 ? Integer.valueOf(((Patient)matchingPatients.get(0)).getPatientId().intValue()) : null, null, null, null, Boolean.valueOf(false), null, null, null };
 
 		appointments = ias.getAppointmentIdsByMulti(conditions, 50);
 
