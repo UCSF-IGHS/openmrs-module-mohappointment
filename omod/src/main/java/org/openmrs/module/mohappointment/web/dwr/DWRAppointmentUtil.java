@@ -57,7 +57,7 @@ public class DWRAppointmentUtil
 			String name = (ret.getGivenName() != null ? ret.getGivenName().trim() : "") + "&nbsp;" + (ret.getMiddleName() != null ? ret.getMiddleName().trim() : "") + "&nbsp;" + (ret.getFamilyName() != null ? ret.getFamilyName().trim() : "");
 
 
-			String provName = app.getProvider().getPersonName().toString();
+			String provName = app.getProvider() != null ? app.getProvider().getPersonName().toString() : "";
 			String appDate = new SimpleDateFormat("dd-MMM-yyyy").format(app.getAppointmentDate());
 
 			String reason = "";
@@ -88,7 +88,7 @@ public class DWRAppointmentUtil
 
 
 			sb.append("<td>" + appDate + "</td>");
-			sb.append("<td>" + app.getProvider().getPersonName() + "</td>");
+			sb.append("<td>" + (app.getProvider() != null ? app.getProvider().getPersonName() : "") + "</td>");
 			sb.append("<td>" + reason + "</td>");
 			sb.append("<td>" + app.getAppointmentState().getDescription() + "</td>");
 
