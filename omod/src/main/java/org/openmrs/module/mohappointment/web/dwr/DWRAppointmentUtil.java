@@ -25,7 +25,7 @@ public class DWRAppointmentUtil
 		List<Patient> matchingPatients = findPatientsByIdentifier(searchString);
 
 		AppointmentService ias = (AppointmentService)Context.getService(AppointmentService.class);
-		Object[] conditions = { Integer.valueOf(((Patient)matchingPatients.get(0)).getPatientId().intValue()), null, null, null, Boolean.valueOf(false), null, null, null };
+		Object[] conditions = { matchingPatients.size() > 0 ? Integer.valueOf(((Patient)matchingPatients.get(0)).getPatientId().intValue()) : null, null, null, null, Boolean.valueOf(false), null, null, null };
 
 		appointments = ias.getAppointmentIdsByMulti(conditions, 50);
 
@@ -57,7 +57,7 @@ public class DWRAppointmentUtil
 			String name = (ret.getGivenName() != null ? ret.getGivenName().trim() : "") + "&nbsp;" + (ret.getMiddleName() != null ? ret.getMiddleName().trim() : "") + "&nbsp;" + (ret.getFamilyName() != null ? ret.getFamilyName().trim() : "");
 
 
-			String provName = app.getProvider().getPersonName().toString();
+			String provName = app.getProvider() != null ? app.getProvider().getPersonName().toString() : "";
 			String appDate = new SimpleDateFormat("dd-MMM-yyyy").format(app.getAppointmentDate());
 
 			String reason = "";
@@ -88,7 +88,7 @@ public class DWRAppointmentUtil
 
 
 			sb.append("<td>" + appDate + "</td>");
-			sb.append("<td>" + app.getProvider().getPersonName() + "</td>");
+			sb.append("<td>" + (app.getProvider() != null ? app.getProvider().getPersonName() : "") + "</td>");
 			sb.append("<td>" + reason + "</td>");
 			sb.append("<td>" + app.getAppointmentState().getDescription() + "</td>");
 
