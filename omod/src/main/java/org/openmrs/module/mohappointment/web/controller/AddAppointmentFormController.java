@@ -18,6 +18,8 @@ package org.openmrs.module.mohappointment.web.controller;
         import org.openmrs.module.mohappointment.model.Appointment;
         import org.openmrs.module.mohappointment.model.Services;
         import org.openmrs.module.mohappointment.utils.AppointmentUtil;
+        import org.springframework.web.bind.annotation.RequestMapping;
+        import org.springframework.web.bind.annotation.RequestMethod;
         import org.springframework.web.servlet.ModelAndView;
         import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -27,7 +29,7 @@ package org.openmrs.module.mohappointment.web.controller;
         private Log log = LogFactory.getLog(getClass());
 
         public AddAppointmentFormController() {}
-
+        @RequestMapping(value = "module/mohappointment/addAppointment.form", method = RequestMethod.POST)
         protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception
         {
         ModelAndView mav = new ModelAndView();

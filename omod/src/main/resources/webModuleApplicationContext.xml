@@ -82,14 +82,17 @@
     </bean>
 
     <bean id="serviceFormController" class="org.openmrs.module.mohappointment.web.controller.AppointmentServiceFormController">
+        <property name="supportedMethods" value="GET,POST,PUT,DELETE" />
         <property name="viewName"><value>/module/mohappointment/serviceForm</value></property>
     </bean>
 
     <bean id="serviceListController" class="org.openmrs.module.mohappointment.web.controller.AppointmentServiceListController">
+        <property name="supportedMethods" value="GET,POST,PUT,DELETE" />
         <property name="viewName"><value>/module/mohappointment/serviceList</value></property>
     </bean>
 
     <bean id="serviceProviderFormController" class="org.openmrs.module.mohappointment.web.controller.AppointmentServiceProviderFormController">
+        <property name="supportedMethods" value="GET,POST,PUT,DELETE" />
         <property name="viewName"><value>/module/mohappointment/serviceProviderForm</value></property>
     </bean>
 
@@ -98,10 +101,12 @@
     </bean>
 
     <bean id="appointmentEditServiceProviderController" class="org.openmrs.module.mohappointment.web.controller.AppointmentEditServiceProviderController">
+        <property name="supportedMethods" value="GET,POST,PUT,DELETE" />
         <property name="viewName"><value>/module/mohappointment/editProviderService</value></property>
     </bean>
 
     <bean id="appointmentEditServiceController" class="org.openmrs.module.mohappointment.web.controller.AppointmentEditServiceController">
+        <property name="supportedMethods" value="GET,POST,PUT,DELETE" />
         <property name="viewName"><value>/module/mohappointment/editService</value></property>
     </bean>
 
@@ -110,6 +115,7 @@
     </bean>
 
     <bean id="searchAppointmentFormController" class="org.openmrs.module.mohappointment.web.controller.SearchAppointmentFormController">
+        <property name="supportedMethods" value="GET,POST,PUT,DELETE" />
         <property name="viewName"><value>/module/mohappointment/searchAppointment</value></property>
     </bean>
 
@@ -118,6 +124,7 @@
     </bean>
 
     <bean id="addAppointmentFormController" class="org.openmrs.module.mohappointment.web.controller.AddAppointmentFormController">
+        <property name="supportedMethods" value="GET,POST,PUT,DELETE" />
         <property name="viewName"><value>/module/mohappointment/mohappointmentForm</value></property>
     </bean>
 

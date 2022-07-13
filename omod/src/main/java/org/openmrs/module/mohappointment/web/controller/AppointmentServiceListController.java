@@ -14,6 +14,8 @@ import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
 import org.openmrs.module.mohappointment.utils.FileExporterUtil;
 import org.openmrs.web.WebConstants;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.mvc.ParameterizableViewController;
  */
 public class AppointmentServiceListController extends
 		ParameterizableViewController {
+	@RequestMapping(value = "module/mohappointment/service.list", method = RequestMethod.POST)
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
