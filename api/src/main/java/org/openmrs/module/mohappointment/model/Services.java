@@ -231,7 +231,7 @@ public class Services {
 		return "\n - Services ID: " + this.serviceId + "\n - Services Name: "
 				+ this.name + "\n - Description: " + this.description
 				+ "\n - Concept: " + this.concept.getDisplayString()
-				+ "\n - Creator: " + this.creator.getName();
+				+ "\n - Creator: " + this.creator.toString();
 	}
 
 }
