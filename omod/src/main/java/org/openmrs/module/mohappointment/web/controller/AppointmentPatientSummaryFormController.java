@@ -14,6 +14,7 @@
 package org.openmrs.module.mohappointment.web.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.SimplifiedObs;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
+import org.openmrs.parameter.OrderSearchCriteriaBuilder;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -53,7 +55,13 @@ public class AppointmentPatientSummaryFormController extends
 		Patient pt = Context.getPatientService().getPatient(
 				Integer.valueOf(request.getParameter("patientId")));
 		mav.addObject("patient", pt);
-		mav.addObject("dOrders", Context.getOrderService().getOrders(pt, null, Context.getOrderService().getOrderTypeByUuid(OrderType.DRUG_ORDER_TYPE_UUID), false));
+
+		OrderType drugOrderType = Context.getOrderService().getOrderTypeByUuid(OrderType.DRUG_ORDER_TYPE_UUID);
+		OrderSearchCriteriaBuilder cb = new OrderSearchCriteriaBuilder();
+		cb.setPatient(pt);
+		cb.setOrderTypes(Collections.singletonList(drugOrderType));
+		cb.setIncludeVoided(false);
+		mav.addObject("dOrders", Context.getOrderService().getOrders(cb.build()));
 
 		List<Concept> concList = new ArrayList<Concept>();
 		concList.add(Context.getConceptService().getConcept(2169));
