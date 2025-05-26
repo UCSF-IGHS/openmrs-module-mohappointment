@@ -60,6 +60,7 @@
 		<MODULE_NAME>Appointment Management</MODULE_NAME>
 		<MODULE_VERSION>${project.parent.version}</MODULE_VERSION>
 		<MODULE_PACKAGE>${project.parent.groupId}.${project.parent.artifactId}</MODULE_PACKAGE>
+		<webservicesRestVersion>2.32.0</webservicesRestVersion>
 	</properties>
 
 	<build>

@@ -171,7 +171,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			// appointments.
 
 			combinedSearch
-					.append("SELECT DISTINCT appointment_id FROM moh_appointment WHERE ");
+					.append("SELECT appointment_id FROM moh_appointment WHERE ");
 
 			if (null != conditions[0] && !conditions[0].equals(""))
 				combinedSearch.append(" patient_id = " + conditions[0]
