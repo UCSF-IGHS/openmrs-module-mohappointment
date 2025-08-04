@@ -9,21 +9,35 @@
  */
 package org.openmrs.module.mohappointment.rest.resource;
 
+import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_APPOINTMENT_DATE;
+import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_APPOINTMENT_STATE;
+import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_ATTENDED;
+import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_LOCATION;
+import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_PATIENT;
+import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_PROVIDER;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.service.AppointmentService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
+import org.openmrs.module.webservices.rest.web.annotation.PropertySetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
+import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
@@ -68,6 +82,14 @@ public class AppointmentResource extends DelegatingCrudResource<Appointment> {
         if (appointment.getCreatedDate() == null) {
             appointment.setCreatedDate(new Date());
         }
+
+        if (appointment.getAppointmentDate() != null && appointment.getAppointmentDate().after(new Date())) {
+            log.info("Appointment date is set in the future: " + appointment.getAppointmentDate());
+            appointment.setAppointmentState(new AppointmentState(3, "UPCOMING"));
+        } else {
+            log.info("Appointment date is not set in the future: " + appointment.getAppointmentDate());
+        }
+
         Context.getService(AppointmentService.class).saveAppointment(appointment);
         return appointment;
     }
@@ -92,6 +114,7 @@ public class AppointmentResource extends DelegatingCrudResource<Appointment> {
         description.addProperty("provider");
         description.addProperty("service");
         description.addProperty("patient");
+        description.addProperty("appointmentState");
         return description;
     }
 
@@ -136,50 +159,71 @@ public class AppointmentResource extends DelegatingCrudResource<Appointment> {
 
     @Override
     protected PageableResult doSearch(RequestContext context) {
-        String patientUuid = context.getRequest().getParameter("patient");
-        String providerUuid = context.getRequest().getParameter("provider");
-        String locationUuid = context.getRequest().getParameter("location");
-        String appointmentDate = context.getRequest().getParameter("appointmentDate");
-        String attended = context.getRequest().getParameter("attended");
-        List<Appointment> appointments = new ArrayList<>();
-        Object[] conditions = new Object[8];
+        String patientUuid = context.getRequest().getParameter(REQUEST_PARAMETER_PATIENT);
+        String providerUuid = context.getRequest().getParameter(REQUEST_PARAMETER_PROVIDER);
+        String locationUuid = context.getRequest().getParameter(REQUEST_PARAMETER_LOCATION);
+        String appointmentDate = context.getRequest().getParameter(REQUEST_PARAMETER_APPOINTMENT_DATE);
+        String attended = context.getRequest().getParameter(REQUEST_PARAMETER_ATTENDED);
+        String appointmentState = context.getRequest().getParameter(REQUEST_PARAMETER_APPOINTMENT_STATE);
+        Map<String, Object> conditions = new HashMap<>();
 
         if (patientUuid != null) {
-            conditions[0] = Context.getPatientService().getPatientByUuid(patientUuid).getPatientId();
+            conditions.put(REQUEST_PARAMETER_PATIENT, Context.getPatientService().getPatientByUuid(patientUuid));
         }
 
         if (providerUuid != null) {
-            conditions[1] = Context.getUserService().getUsersByPerson(Context.getPersonService().getPersonByUuid(providerUuid), false).get(0).getUserId();
+            conditions.put(REQUEST_PARAMETER_PROVIDER, Context.getPersonService().getPersonByUuid(providerUuid));
         }
 
         if (locationUuid != null) {
-            conditions[2] = Context.getLocationService().getLocationByUuid(locationUuid).getLocationId();
+            conditions.put(REQUEST_PARAMETER_LOCATION, Context.getLocationService().getLocationByUuid(locationUuid));
         }
 
         if (appointmentDate != null) {
             try {
-                conditions[3] = Context.getDateFormat().parse(appointmentDate);
-                conditions[5] = Context.getDateFormat().parse(appointmentDate);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                conditions.put(REQUEST_PARAMETER_APPOINTMENT_DATE, sdf.parse(appointmentDate));
             } catch (Exception e) {
-
+                log.error("Error parsing date: " + e.getMessage(), e);
             }
         }
 
         if (attended != null) {
-            conditions[4] = Boolean.parseBoolean(attended);
+            conditions.put(REQUEST_PARAMETER_ATTENDED, Boolean.parseBoolean(attended));
         }
 
-        List<Integer> appointmentIdsByMulti = Context.getService(AppointmentService.class).getAppointmentIdsByMulti(conditions, context.getLimit());
-        if (appointmentIdsByMulti != null && !appointmentIdsByMulti.isEmpty()) {
-            appointmentIdsByMulti.forEach(appointmentId -> appointments.add(Context.getService(AppointmentService.class).getAppointmentById(appointmentId)));
+        if (appointmentState != null) {
+            AppointmentState state = Context.getService(AppointmentService.class).getAppointmentStatesByName(appointmentState);
+            if (state == null) {
+                state = Context.getService(AppointmentService.class).getAppointmentStates().stream()
+                        .filter(s -> s.getAppointmentStateId().equals(appointmentState))
+                        .findFirst()
+                        .orElse(null);
+            }
+
+            if (state != null) {
+                conditions.put(REQUEST_PARAMETER_APPOINTMENT_STATE, state);
+            }
         }
 
-        return new NeedsPaging<>(appointments, context);
+        int startIndex = context.getStartIndex();
+        int limit = context.getLimit();
+
+        List<Appointment> appointments = Context.getService(AppointmentService.class).getAppointmentsByCriteria(conditions, startIndex, limit);
+        long totalCount = Context.getService(AppointmentService.class).getAppointmentsCountByCriteria(conditions);
+        boolean hasMore = (startIndex + limit) < totalCount;
+
+        return new AlreadyPaged<>(context, appointments, hasMore, totalCount);
     }
 
     @Override
     protected PageableResult doGetAll(RequestContext context) throws ResponseException {
         List<Appointment> appointments = new ArrayList<>(Context.getService(AppointmentService.class).getAllAppointments());
         return new NeedsPaging<>(appointments, context);
+    }
+
+    @PropertySetter("reason")
+    public void setReason(Appointment appointment, Obs reason) {
+        appointment.setReason(Context.getObsService().saveObs(reason, null));
     }
 }

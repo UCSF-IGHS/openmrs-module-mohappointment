@@ -61,4 +61,11 @@ public class ConstantValues {
 	public final static String GLOBAL_PROPERTY_RESTRICT_BY_HEALTH_CENTER = "registration.restrictSearchByHealthCenter";
 	public static final String MOTHER_NAME_ATTRIBUTE_TYPE = "Mother's name";
 	public static final String FATHER_NAME_ATTRIBUTE_TYPE = "Father's name";
+
+	public static final String REQUEST_PARAMETER_PATIENT = "patient";
+	public static final String REQUEST_PARAMETER_PROVIDER = "provider";
+	public static final String REQUEST_PARAMETER_LOCATION = "location";
+	public static final String REQUEST_PARAMETER_APPOINTMENT_DATE = "appointmentDate";
+	public static final String REQUEST_PARAMETER_ATTENDED = "attended";
+	public static final String REQUEST_PARAMETER_APPOINTMENT_STATE = "appointmentState";
 }

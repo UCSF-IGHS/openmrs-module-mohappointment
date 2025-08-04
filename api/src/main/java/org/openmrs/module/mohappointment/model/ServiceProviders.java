@@ -206,12 +206,10 @@ public class ServiceProviders {
 	public String getNames() {
 		System.out.println("_______________Names are just null here : "
 				+ this.names);
-		if (Context.getUserService().getUser(getProvider().getPersonId())
-				.getFamilyName() != null)
-			this.names = Context.getUserService().getUser(
-					getProvider().getPersonId()).getFamilyName()
-					+ Context.getUserService().getUser(
-							getProvider().getPersonId()).getGivenName();
+		if (getProvider() != null) {
+			this.names = getProvider().getPersonName().getFullName();
+		}
+
 		System.out
 				.println("_______________I am supposed to see something here : "
 						+ this.names);

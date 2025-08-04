@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Concept;
 import org.openmrs.Obs;
@@ -242,4 +243,11 @@ public interface AppointmentService {
 
 	public  void  voidAppointmentByObs(Obs o);
 
+	List<Appointment> getAppointmentsByCriteria(Map<String, Object> conditions, int startIndex, int limit);
+
+	long getAppointmentsCountByCriteria(Map<String, Object> conditions);
+
+	List<Appointment> getAllAppointments(Date forDate);
+
+	List<Appointment> getAppointmentsForService(Services service, Date startDate, Date endDate);
 }
