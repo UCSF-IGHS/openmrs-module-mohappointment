@@ -9,20 +9,9 @@
  */
 package org.openmrs.module.mohappointment.rest.resource;
 
-import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_APPOINTMENT_DATE;
-import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_APPOINTMENT_STATE;
-import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_ATTENDED;
-import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_LOCATION;
-import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_PATIENT;
-import static org.openmrs.module.mohappointment.utils.ConstantValues.REQUEST_PARAMETER_PROVIDER;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.*;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Appointment;
@@ -43,6 +32,11 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static org.openmrs.module.mohappointment.utils.ConstantValues.*;
 
 @Resource(name = RestConstants.VERSION_1 + "/mohappointment/appointment",
         supportedClass = Appointment.class,
@@ -116,6 +110,69 @@ public class AppointmentResource extends DelegatingCrudResource<Appointment> {
         description.addProperty("patient");
         description.addProperty("appointmentState");
         return description;
+    }
+
+    @Override
+    public Model getGETModel(Representation rep) {
+        ModelImpl model = (ModelImpl) super.getGETModel(rep);
+        if (rep instanceof DefaultRepresentation || rep instanceof FullRepresentation) {
+            model
+                    .property("appointmentId", new IntegerProperty())
+                    .property("appointmentDate", new DateTimeProperty())
+                    .property("reason", new RefProperty("#/definitions/ObsGet"))
+                    .property("nextVisitDate", new RefProperty("#/definitions/ObsGet"))
+                    .property("note", new StringProperty())
+                    .property("encounter", new RefProperty("#/definitions/EncounterGet"))
+                    .property("location", new RefProperty("#/definitions/LocationGet"))
+                    .property("provider", new RefProperty("#/definitions/PersonGet"))
+                    .property("service", new RefProperty("#/definitions/MohappointmentServicesGet"))
+                    .property("patient", new RefProperty("#/definitions/PatientGet"))
+                    .property("appointmentState", new RefProperty("#/definitions/MohappointmentAppointmentStateGet"));
+        }
+        if (rep instanceof FullRepresentation) {
+            model
+                    .property("creator", new RefProperty("#/definitions/UserGet"))
+                    .property("createdDate", new DateTimeProperty())
+                    .property("voided", new BooleanProperty())
+                    .property("voidedBy", new RefProperty("#/definitions/UserGet"))
+                    .property("voidReason", new StringProperty())
+                    .property("voidedDate", new DateTimeProperty());
+        }
+        return model;
+    }
+
+    @Override
+    public Model getCREATEModel(Representation rep) {
+        ModelImpl model = new ModelImpl()
+                .property("appointmentDate", new DateTimeProperty()
+                        .example("2024-01-15T10:30:00.000")
+                        .description("Date and time of the appointment"))
+                .property("reason", new ObjectProperty()
+                        .description("Obs object for reason"))
+                .property("nextVisitDate", new ObjectProperty()
+                        .description("Obs object for next visit date"))
+                .property("note", new StringProperty()
+                        .description("Additional notes"))
+                .property("encounter", new ObjectProperty()
+                        .property("uuid", new StringProperty())
+                        .description("Encounter object identified by uuid"))
+                .property("location", new ObjectProperty()
+                        .property("uuid", new StringProperty())
+                        .description("Location object identified by uuid"))
+                .property("provider", new ObjectProperty()
+                        .property("uuid", new StringProperty())
+                        .description("Provider (Person) object identified by uuid"))
+                .property("service", new ObjectProperty()
+                        .property("serviceId", new IntegerProperty())
+                        .description("Service object identified by serviceId"))
+                .property("patient", new ObjectProperty()
+                        .property("uuid", new StringProperty())
+                        .description("Patient object identified by uuid"))
+                .property("appointmentState", new ObjectProperty()
+                        .property("appointmentStateId", new IntegerProperty())
+                        .description("Appointment State object identified by appointmentStateId"));
+
+        return model;
     }
 
     @Override

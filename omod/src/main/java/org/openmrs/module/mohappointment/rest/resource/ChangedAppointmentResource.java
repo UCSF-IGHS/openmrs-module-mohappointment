@@ -9,6 +9,9 @@
  */
 package org.openmrs.module.mohappointment.rest.resource;
 
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.*;
 import org.openmrs.module.mohappointment.model.ChangedAppointment;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
@@ -65,6 +68,42 @@ public class ChangedAppointmentResource extends DelegatingCrudResource<ChangedAp
         description.addProperty("reason");
         description.addProperty("newDateOfAppointment");
         return description;
+    }
+
+    @Override
+    public Model getGETModel(Representation rep) {
+        ModelImpl model = (ModelImpl) super.getGETModel(rep);
+        if (rep instanceof DefaultRepresentation || rep instanceof FullRepresentation) {
+            model
+                    .property("changedAppointId", new IntegerProperty())
+                    .property("appointment", new RefProperty("#/definitions/MohappointmentAppointmentGet"))
+                    .property("reason", new StringProperty())
+                    .property("newDateOfAppointment", new DateTimeProperty());
+        }
+        return model;
+    }
+
+    @Override
+    public Model getCREATEModel(Representation rep) {
+        ModelImpl model = new ModelImpl()
+                .property("appointment", new ObjectProperty()
+                        .property("appointmentId", new IntegerProperty())
+                        .description("Appointment object identified by appointmentId"))
+                .property("reason", new StringProperty()
+                        .description("Reason for changing the appointment"))
+                .property("newDateOfAppointment", new DateTimeProperty()
+                        .example("2024-01-20T14:00:00.000")
+                        .description("New date and time for the appointment"));
+
+        model.required("appointment")
+                .required("newDateOfAppointment");
+
+        return model;
+    }
+
+    @Override
+    public Model getUPDATEModel(Representation rep) {
+        return getCREATEModel(rep);
     }
 
     @Override

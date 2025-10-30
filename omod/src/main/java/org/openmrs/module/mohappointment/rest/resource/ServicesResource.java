@@ -9,9 +9,9 @@
  */
 package org.openmrs.module.mohappointment.rest.resource;
 
-import java.util.ArrayList;
-import java.util.Date;
-
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.*;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.Services;
 import org.openmrs.module.mohappointment.service.AppointmentService;
@@ -28,6 +28,9 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 @Resource(name = RestConstants.VERSION_1 + "/mohappointment/services",
         supportedClass = Services.class,
@@ -79,6 +82,50 @@ public class ServicesResource extends DelegatingCrudResource<Services> {
         description.addProperty("description");
         description.addProperty("concept");
         return description;
+    }
+
+    @Override
+    public Model getGETModel(Representation rep) {
+        ModelImpl model = (ModelImpl) super.getGETModel(rep);
+        if (rep instanceof DefaultRepresentation || rep instanceof FullRepresentation) {
+            model
+                    .property("serviceId", new IntegerProperty())
+                    .property("name", new StringProperty())
+                    .property("description", new StringProperty())
+                    .property("concept", new RefProperty("#/definitions/ConceptGet"));
+        }
+        if (rep instanceof FullRepresentation) {
+            model
+                    .property("creator", new RefProperty("#/definitions/UserGet"))
+                    .property("createdDate", new DateTimeProperty())
+                    .property("retired", new BooleanProperty())
+                    .property("retiredBy", new RefProperty("#/definitions/UserGet"))
+                    .property("retireReason", new StringProperty())
+                    .property("retireDate", new DateTimeProperty());
+        }
+        return model;
+    }
+
+    @Override
+    public Model getCREATEModel(Representation rep) {
+        ModelImpl model = new ModelImpl()
+                .property("name", new StringProperty()
+                        .description("Name of the service"))
+                .property("description", new StringProperty()
+                        .description("Description of the service"))
+                .property("concept", new ObjectProperty()
+                        .property("uuid", new StringProperty())
+                        .description("Concept object identified by uuid"));
+
+        model.required("name")
+                .required("concept");
+
+        return model;
+    }
+
+    @Override
+    public Model getUPDATEModel(Representation rep) {
+        return getCREATEModel(rep);
     }
 
     @Override

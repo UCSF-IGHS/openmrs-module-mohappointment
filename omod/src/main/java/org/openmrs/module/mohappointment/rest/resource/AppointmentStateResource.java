@@ -9,9 +9,10 @@
  */
 package org.openmrs.module.mohappointment.rest.resource;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.IntegerProperty;
+import io.swagger.models.properties.StringProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.service.AppointmentService;
@@ -29,7 +30,10 @@ import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@Resource(name = RestConstants.VERSION_1 + "/mohappointment/appointmentstate",
+import java.util.ArrayList;
+import java.util.List;
+
+@Resource(name = RestConstants.VERSION_1 + "/mohappointment/appointmentState",
         supportedClass = AppointmentState.class,
         supportedOpenmrsVersions = {"2.0 - 9.*"})
 public class AppointmentStateResource extends DelegatingCrudResource<AppointmentState> {
@@ -69,6 +73,33 @@ public class AppointmentStateResource extends DelegatingCrudResource<Appointment
         DelegatingResourceDescription description = new DelegatingResourceDescription();
         description.addProperty("description");
         return description;
+    }
+
+    @Override
+    public Model getGETModel(Representation rep) {
+        ModelImpl model = (ModelImpl) super.getGETModel(rep);
+        if (rep instanceof DefaultRepresentation || rep instanceof FullRepresentation) {
+            model
+                    .property("appointmentStateId", new IntegerProperty())
+                    .property("description", new StringProperty());
+        }
+        return model;
+    }
+
+    @Override
+    public Model getCREATEModel(Representation rep) {
+        ModelImpl model = new ModelImpl()
+                .property("description", new StringProperty()
+                        .description("Description of the appointment state"));
+
+        model.required("description");
+
+        return model;
+    }
+
+    @Override
+    public Model getUPDATEModel(Representation rep) {
+        return getCREATEModel(rep);
     }
 
     @Override

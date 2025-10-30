@@ -9,9 +9,9 @@
  */
 package org.openmrs.module.mohappointment.rest.resource;
 
-import java.util.ArrayList;
-import java.util.Date;
-
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.*;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
 import org.openmrs.module.mohappointment.service.AppointmentService;
@@ -28,6 +28,9 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 @Resource(name = RestConstants.VERSION_1 + "/mohappointment/serviceProviders",
         supportedClass = ServiceProviders.class,
@@ -80,6 +83,56 @@ public class ServiceProvidersResource extends DelegatingCrudResource<ServiceProv
         description.addProperty("service");
         description.addProperty("names");
         return description;
+    }
+
+    @Override
+    public Model getGETModel(Representation rep) {
+        ModelImpl model = (ModelImpl) super.getGETModel(rep);
+        if (rep instanceof DefaultRepresentation || rep instanceof FullRepresentation) {
+            model
+                    .property("serviceProviderId", new IntegerProperty())
+                    .property("startDate", new DateTimeProperty())
+                    .property("provider", new RefProperty("#/definitions/PersonGet"))
+                    .property("service", new RefProperty("#/definitions/MohappointmentServicesGet"))
+                    .property("names", new StringProperty());
+        }
+        if (rep instanceof FullRepresentation) {
+            model
+                    .property("creator", new RefProperty("#/definitions/UserGet"))
+                    .property("createdDate", new DateTimeProperty())
+                    .property("voided", new BooleanProperty())
+                    .property("voidedBy", new RefProperty("#/definitions/UserGet"))
+                    .property("voidedReason", new StringProperty())
+                    .property("voidedDate", new DateTimeProperty());
+        }
+        return model;
+    }
+
+    @Override
+    public Model getCREATEModel(Representation rep) {
+        ModelImpl model = new ModelImpl()
+                .property("startDate", new DateTimeProperty()
+                        .example("2024-01-01T08:00:00.000")
+                        .description("Start date for the service provider"))
+                .property("provider", new ObjectProperty()
+                        .property("uuid", new StringProperty())
+                        .description("Provider (Person) object identified by uuid"))
+                .property("service", new ObjectProperty()
+                        .property("serviceId", new IntegerProperty())
+                        .description("Service object identified by serviceId"))
+                .property("names", new StringProperty()
+                        .description("Provider names"));
+
+        model.required("startDate")
+                .required("provider")
+                .required("service");
+
+        return model;
+    }
+
+    @Override
+    public Model getUPDATEModel(Representation rep) {
+        return getCREATEModel(rep);
     }
 
     @Override
